@@ -76,12 +76,11 @@ let
           if targetMachine != null
           then
             (
-              x: lib.lists.any (
-                p: builtins.elem p ["manylinux1_${targetMachine}"
-                           "manylinux2010_${targetMachine}"
-                           "manylinux2014_${targetMachine}"
-                           "any"]
-                ) (splitString "." x.platform)
+              x: x.platform == "any" || lib.lists.any (e: hasInfix e x.platform) [
+                  "manylinux1_${targetMachine}"
+                  "manylinux2010_${targetMachine}"
+                  "manylinux2014_${targetMachine}"
+              ]
             )
           else
             (x: x.platform == "any")
